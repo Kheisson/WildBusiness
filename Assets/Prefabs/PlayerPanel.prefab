@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a72e24a6ac6ed4c4cb331646c024679b, type: 2}
   m_sharedMaterial: {fileID: -7674596536636596702, guid: a72e24a6ac6ed4c4cb331646c024679b, type: 2}
@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
   m_sharedMaterial: {fileID: -519287684272490670, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
   m_sharedMaterial: {fileID: -519287684272490670, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
@@ -1815,6 +1815,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2458950952332913992}
+  - component: {fileID: 1485685781662492976}
+  - component: {fileID: 7441824787588120839}
   m_Layer: 5
   m_Name: PlayerPanel
   m_TagString: Untagged
@@ -1842,6 +1844,40 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1485685781662492976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6580724617021014410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169d0f3d8aa34de9bce8c086f246f113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarImage: {fileID: 2778422371760398304}
+  titleText: {fileID: 8982382071685815110}
+  xpText: {fileID: 2045393867919448772}
+  nicknameText: {fileID: 3758048619594640510}
+  spText: {fileID: 2822881615717031764}
+  moneyText: {fileID: 8492516745144520020}
+  diamondsText: {fileID: 5636101687098495546}
+  ticketsText: {fileID: 8301532298944707741}
+--- !u!114 &7441824787588120839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6580724617021014410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff316491fd6406483d16c0b3e88a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerProfileData: {fileID: 11400000, guid: 14be6b7568304482991ac02278ac5b76, type: 2}
+  _playerProfileView: {fileID: 1485685781662492976}
 --- !u!1 &6738367357765891579
 GameObject:
   m_ObjectHideFlags: 0
@@ -2269,11 +2305,11 @@ RectTransform:
   - {fileID: 4230531901135441178}
   m_Father: {fileID: 8724051940011484522}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 110, y: 0}
-  m_SizeDelta: {x: -220, y: -280}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 220, y: 0}
+  m_SizeDelta: {x: 482, y: 200}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1600606414047693468
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2399,6 +2435,7 @@ GameObject:
   - component: {fileID: 1320654882502456998}
   - component: {fileID: 8492516745144520020}
   - component: {fileID: 4506578559028874720}
+  - component: {fileID: 1692148015433094698}
   m_Layer: 5
   m_Name: BalanceText
   m_TagString: Untagged
@@ -2453,7 +2490,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 400$
+  m_text: 1$
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
   m_sharedMaterial: {fileID: -519287684272490670, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
@@ -2551,6 +2588,18 @@ MonoBehaviour:
   OriginalFontSize: 32
   OriginalMinFontSize: 24
   OriginalMaxFontSize: 36
+--- !u!114 &1692148015433094698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661246643855977176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6366ee97f6b541449155028b9487355a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8245575164508936710
 GameObject:
   m_ObjectHideFlags: 0
@@ -3224,9 +3273,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'CEO
-
-'
+  m_text: CEO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
   m_sharedMaterial: {fileID: -519287684272490670, guid: 1e4d1383998844f47a62f0999c223b08, type: 2}
