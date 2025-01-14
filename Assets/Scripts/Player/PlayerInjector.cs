@@ -1,4 +1,3 @@
-using System;
 using Infra;
 using Infra.Injector;
 using Ui;
@@ -13,7 +12,7 @@ namespace Player
         
         public override InjectionType InjectionTiming => InjectionType.Instantly;
 
-        private void OnEnable()
+        private void Awake()
         {
             GameInitializer.Instance.RegisterInjector(this, InjectionType.Instantly);
         }

@@ -20,3 +20,4 @@ MonoBehaviour:
   money: 0
   diamonds: 0
   tickets: 0
+  stamina: 0

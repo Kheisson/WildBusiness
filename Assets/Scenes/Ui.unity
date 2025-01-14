@@ -872,6 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b97b4c2aee348e9a0a2651c115aa3a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handPrefab: {fileID: 2893882818050668251, guid: 51f927578c3674f0f9f6749f67d287d7, type: 3}
 --- !u!1 &1000925045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1138,7 @@ GameObject:
   - component: {fileID: 1418615550}
   - component: {fileID: 1418615549}
   - component: {fileID: 1418615552}
+  - component: {fileID: 1418615553}
   m_Layer: 5
   m_Name: Clicker
   m_TagString: Untagged
@@ -1257,8 +1259,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c314d3192fd4fbb88c1680af703a9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  darkener: {fileID: 878998919}
-  targetUIElement: {fileID: 1418615548}
+--- !u!114 &1418615553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418615547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db792c3701ca4c42948e51679e56d11c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elementType: 0
 --- !u!1 &1729679517
 GameObject:
   m_ObjectHideFlags: 0

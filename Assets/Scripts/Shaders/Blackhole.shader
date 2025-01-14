@@ -3,7 +3,7 @@ Shader "Unlit/Blackhole" {
         _MainTex ("Texture", 2D) = "white" {}
         _MaskCenter ("Mask Center", Vector) = (0.5, 0.5, 0, 0)
         _MaskSize ("Mask Size", Vector) = (0.1, 0.1, 0, 0)
-        _OverlayColor ("Overlay Color", Color) = (0, 0, 0, 0.5)
+        _OverlayColor ("Overlay Color", Color) = (0, 0, 0, 0.75)
     }
     SubShader {
         Tags { "Queue" = "Overlay" "RenderType" = "Transparent" }

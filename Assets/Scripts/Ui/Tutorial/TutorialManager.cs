@@ -1,72 +1,42 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Infra;
 
 namespace Ui.Tutorial
 {
-    public class TutorialManager : MonoBehaviour
+    public class TutorialManager
     {
-        public static TutorialManager Instance { get; private set; }
+        public event Action<ETutorialElementsType> OnShowTutorial;
+        public event Action<ETutorialElementsType> OnHideTutorial;
+        
+        private readonly Dictionary<ETutorialElementsType, TutorialElement> _tutorialElements = new();
+        private TutorialScreenDarkener _tutorialScreenDarkener;
 
-        public event Action<List<RectTransform>> OnShowTutorial;
-        public event Action<List<RectTransform>> OnHideTutorial;
 
-        private HashSet<TutorialElement> activeElements = new HashSet<TutorialElement>();
-
-        private void Awake()
+        public void RegisterTutorialElement(TutorialElement tutorialElement)
         {
-            if (Instance == null)
+            _tutorialElements.TryAdd(tutorialElement.ElementType, tutorialElement);
+        }
+        
+        public void ShowTutorialElement(ETutorialElementsType elementType)
+        {
+            if (_tutorialScreenDarkener == null)
             {
-                Instance = this;
+                _tutorialScreenDarkener = ServiceLocator.GetService<TutorialScreenDarkener>();
             }
-            else
+            
+            if (_tutorialElements.TryGetValue(elementType, out var tutorialElement))
             {
-                Destroy(gameObject);
+                tutorialElement.RectTransform.gameObject.SetActive(true);
+                _tutorialScreenDarkener.SetHighlight(tutorialElement.RectTransform, 1f);
+                OnShowTutorial?.Invoke(elementType);
             }
         }
-
-        public void ShowTutorial(params RectTransform[] elements)
+        
+        public void HideTutorialElement(ETutorialElementsType elementType)
         {
-            List<RectTransform> newElements = new List<RectTransform>();
-            foreach (var element in elements)
-            {
-                var tutorialElement = element.GetComponent<TutorialElement>();
-                if (tutorialElement != null && !activeElements.Contains(tutorialElement))
-                {
-                    tutorialElement.Show();
-                    activeElements.Add(tutorialElement);
-                    newElements.Add(element);
-                }
-            }
-            OnShowTutorial?.Invoke(newElements);
-        }
-
-        public void HideTutorial(params RectTransform[] elements)
-        {
-            List<RectTransform> hiddenElements = new List<RectTransform>();
-            foreach (var element in elements)
-            {
-                var tutorialElement = element.GetComponent<TutorialElement>();
-                if (tutorialElement != null && activeElements.Contains(tutorialElement))
-                {
-                    tutorialElement.Hide();
-                    activeElements.Remove(tutorialElement);
-                    hiddenElements.Add(element);
-                }
-            }
-            OnHideTutorial?.Invoke(hiddenElements);
-        }
-
-        public void HideAllTutorials()
-        {
-            List<RectTransform> allHiddenElements = new List<RectTransform>();
-            foreach (var tutorialElement in activeElements)
-            {
-                tutorialElement.Hide();
-                allHiddenElements.Add(tutorialElement.GetComponent<RectTransform>());
-            }
-            activeElements.Clear();
-            OnHideTutorial?.Invoke(allHiddenElements);
+            _tutorialScreenDarkener.Hide(); 
+            OnHideTutorial?.Invoke(elementType);
         }
     }
 }

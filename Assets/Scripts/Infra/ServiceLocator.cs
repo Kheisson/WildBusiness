@@ -10,13 +10,29 @@ namespace Infra
         public static void RegisterService<T>(T service)
         {
             var type = typeof(T);
-            Services.TryAdd(type, service);
+            
+            if (!Services.TryAdd(type, service))
+            {
+                throw new InvalidOperationException($"Service of type {type.FullName} is already registered.");
+            }
         }
 
         public static T GetService<T>()
         {
             var type = typeof(T);
-            return Services.TryGetValue(type, out var service) ? (T)service : default(T);
+            
+            if (Services.TryGetValue(type, out var service))
+            {
+                return (T)service;
+            }
+
+            LogServiceNotFound(type);
+            return default;
+        }
+
+        private static void LogServiceNotFound(Type type)
+        {
+            LlamaLog.LogWarning($"Service of type {type.FullName} is not registered.");
         }
     }
 }

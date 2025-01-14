@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Infra.Injector;
+using Ui.Tutorial;
 
 namespace Infra
 {
     public class GameInitializer : SingletonMono<GameInitializer>
     {
         private List<IInjector> _injectors = new List<IInjector>();
+        private TutorialManager _tutorialManager;
 
         public void RegisterInjector(IInjector injector, InjectionType injectionType)
         {
@@ -19,6 +21,8 @@ namespace Infra
 
         private void Awake()
         {
+            InitializeTutorialManager();
+
             foreach (var injector in _injectors)
             {
                 if (injector.InjectionTiming == InjectionType.Awake)
@@ -48,6 +52,12 @@ namespace Infra
                     injector.Inject();
                 }
             }
+        }
+        
+        private void InitializeTutorialManager()
+        {
+            _tutorialManager = new TutorialManager();
+            ServiceLocator.RegisterService(_tutorialManager);
         }
     }
 }

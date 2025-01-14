@@ -1,3 +1,4 @@
+using System;
 using Infra.Helpers;
 using TMPro;
 using UIAssistant;
@@ -21,41 +22,52 @@ namespace Ui
         {
             avatarImage.sprite = avatar;
         }
-        
+
         public void SetTitle(string title)
         {
-            titleText.text = title;
+            UpdateTextElement(titleText, title);
         }
-        
-        public void SetXp(int xp)
-        {
-            xpText.text = xp.ToString();
-        }
-        
+
         public void SetNickname(string nickname)
         {
-            nicknameText.text = nickname;
+            UpdateTextElement(nicknameText, nickname);
         }
-        
+
+        public void SetXp(int xp)
+        {
+            UpdateTextElement(xpText, xp.ToString());
+        }
+
         public void SetSp(int sp)
         {
-            spText.text = sp.ToString();
+            UpdateTextElement(spText, sp.ToString());
         }
-        
+
         public void SetMoney(int money)
         {
-            moneyText.text = money.ConvertToCurrencyString();
-            moneyText.GetComponent<TextRevealer>()?.RevealText();
+            UpdateTextElement(moneyText, money.ConvertToCurrencyString(), () =>
+            {
+                moneyText.GetComponent<TextRevealer>()?.RevealText();
+            });
         }
-        
+
         public void SetDiamonds(int diamonds)
         {
-            diamondsText.text = diamonds.ToString();
+            UpdateTextElement(diamondsText, diamonds.ToString());
         }
-        
+
         public void SetTickets(int tickets)
         {
-            ticketsText.text = tickets.ToString();
+            UpdateTextElement(ticketsText, tickets.ToString());
+        }
+
+        private void UpdateTextElement(TextMeshProUGUI textComponent, string newText, Action onChangeAction = null)
+        {
+            if (textComponent.text != newText)
+            {
+                textComponent.text = newText;
+                onChangeAction?.Invoke(); 
+            }
         }
     }
 }

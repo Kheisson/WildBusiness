@@ -1,26 +1,22 @@
+using Infra;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Ui.Tutorial
 {
-    [RequireComponent(typeof(RectTransform), typeof(TutorialScreenDarkener))]
+    [RequireComponent(typeof(RectTransform))]
     public class TutorialElement : MonoBehaviour
     {
-        private TutorialScreenDarkener darkener;
-
-        private void Awake()
+        [FormerlySerializedAs("_element")] [SerializeField] private ETutorialElementsType elementType;
+        private RectTransform _rectTransform;
+        
+        public ETutorialElementsType ElementType => elementType;
+        public RectTransform RectTransform => _rectTransform;
+        
+        private void Start() 
         {
-            darkener = GetComponent<TutorialScreenDarkener>();
-        }
-
-        public void Show()
-        {
-            darkener.SetHighlight(GetComponent<RectTransform>());
-            gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
+            _rectTransform = GetComponent<RectTransform>();
+            ServiceLocator.GetService<TutorialManager>().RegisterTutorialElement(this);
         }
     }
 }
