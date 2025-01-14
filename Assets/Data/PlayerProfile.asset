@@ -15,8 +15,8 @@ MonoBehaviour:
   avatar: {fileID: 21300000, guid: 3c8e7addd0f434fceb3c72cf0cf8eef0, type: 3}
   title: CEO
   nickname: SillyLlama
-  xp: 1
-  sp: 1
-  money: 307
-  diamonds: 1
-  tickets: 1
+  xp: 0
+  sp: 0
+  money: 0
+  diamonds: 0
+  tickets: 0

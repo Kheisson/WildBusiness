@@ -1,6 +1,6 @@
-using System;
 using Infra;
 using Player;
+using Ui.Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +22,11 @@ namespace Ui
         
         private void Shift()
         {
-            _playerProfileController.UpdateProfile(money: _playerProfileController.PlayerProfileData.Money + 100000);
+            darkener.SetHighlight(targetUIElement);
         }
+        
+        public TutorialScreenDarkener darkener;
+        public RectTransform targetUIElement;
+        
     }
 }

@@ -1,5 +1,6 @@
 using Infra.Helpers;
 using TMPro;
+using UIAssistant;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +45,7 @@ namespace Ui
         public void SetMoney(int money)
         {
             moneyText.text = money.ConvertToCurrencyString();
+            moneyText.GetComponent<TextRevealer>()?.RevealText();
         }
         
         public void SetDiamonds(int diamonds)

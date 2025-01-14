@@ -214,7 +214,7 @@ MonoBehaviour:
   - {fileID: 2979790020465716770}
   TextRevealerTimePerCharacter: 0.075
   TextRevealerSkipSpaces: 1
-  TextRevealerPauseCharacters: .?!
+  TextRevealerPauseCharacters: ?!$
   TextRevealerRegularPauseTime: 0.325
   TextRevealerEllipsisCharacters: .
   TextRevealerEllipsisPauseTime: 0.5

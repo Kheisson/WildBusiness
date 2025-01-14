@@ -2436,6 +2436,7 @@ GameObject:
   - component: {fileID: 8492516745144520020}
   - component: {fileID: 4506578559028874720}
   - component: {fileID: 1692148015433094698}
+  - component: {fileID: 7855274141769581828}
   m_Layer: 5
   m_Name: BalanceText
   m_TagString: Untagged
@@ -2600,6 +2601,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6366ee97f6b541449155028b9487355a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7855274141769581828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661246643855977176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672184f2fad65ad45848ad9386663d5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationSettings: {fileID: 11400000, guid: 0d1bdb99885d09d45a7501806f8e7367, type: 2}
+  ColorSettings: {fileID: 11400000, guid: 0ab7bcd6d7cbc1e4eb43d40dea0a6cfe, type: 2}
+  OptionSettings: {fileID: 11400000, guid: 2dcd8cbd47f2fff4e96388c5fc7e6155, type: 2}
+  ScaleSettings: {fileID: 11400000, guid: 8997d46e24cbe0e4083ab22c98c40507, type: 2}
+  TextSettings: {fileID: 11400000, guid: a73c01a01f7352f47bbff334024fde27, type: 2}
+  Text: {fileID: 8492516745144520020}
+  StartHidden: 0
+  OnRevealStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRevealEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8245575164508936710
 GameObject:
   m_ObjectHideFlags: 0

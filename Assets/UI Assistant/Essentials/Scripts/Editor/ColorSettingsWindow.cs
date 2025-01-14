@@ -684,7 +684,7 @@ namespace UIAssistant
         {
             if (GUILayout.Button(UpdateColorizablesContent, GUILayout.Height(ContentLibrary.RowHeight)))
             {
-                List<GraphicColorizer> coloredGraphics = new(FindObjectsOfType<GraphicColorizer>(true));
+                List<GraphicColorizer> coloredGraphics = new(FindObjectsByType<GraphicColorizer>(FindObjectsInactive.Include, FindObjectsSortMode.None));
 
                 for (int i = 0; i < coloredGraphics.Count; i++)
                 {
