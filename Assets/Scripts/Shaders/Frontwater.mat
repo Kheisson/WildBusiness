@@ -29,7 +29,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CustomTime: 7.131626
+    - _CustomTime: 19.902824
     - _ScrollSpeed: 0.2
     m_Colors: []
   m_BuildTextureStacks: []

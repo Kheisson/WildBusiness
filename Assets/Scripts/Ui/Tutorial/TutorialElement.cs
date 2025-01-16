@@ -1,3 +1,4 @@
+using System;
 using Infra;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -13,7 +14,7 @@ namespace Ui.Tutorial
         public ETutorialElementsType ElementType => elementType;
         public RectTransform RectTransform => _rectTransform;
         
-        private void Start() 
+        private void Awake() 
         {
             _rectTransform = GetComponent<RectTransform>();
             ServiceLocator.GetService<TutorialManager>().RegisterTutorialElement(this);

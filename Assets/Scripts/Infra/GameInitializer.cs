@@ -6,7 +6,7 @@ namespace Infra
 {
     public class GameInitializer : SingletonMono<GameInitializer>
     {
-        private List<IInjector> _injectors = new List<IInjector>();
+        private readonly List<IInjector> _injectors = new List<IInjector>();
         private TutorialManager _tutorialManager;
 
         public void RegisterInjector(IInjector injector, InjectionType injectionType)
@@ -21,8 +21,6 @@ namespace Infra
 
         private void Awake()
         {
-            InitializeTutorialManager();
-
             foreach (var injector in _injectors)
             {
                 if (injector.InjectionTiming == InjectionType.Awake)
@@ -58,6 +56,11 @@ namespace Infra
         {
             _tutorialManager = new TutorialManager();
             ServiceLocator.RegisterService(_tutorialManager);
+        }
+
+        public void Initialize()
+        {
+            InitializeTutorialManager();
         }
     }
 }

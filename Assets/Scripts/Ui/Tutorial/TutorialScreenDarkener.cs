@@ -99,6 +99,8 @@ namespace Ui.Tutorial
 
             if (handPrefab == null) return;
             
+            localPoint.x += 25;
+            localPoint.y -= 25;
             _handInstance = Instantiate(handPrefab, _canvasRectTransform);
             _handInstance.GetComponent<RectTransform>().anchoredPosition = localPoint;
         }

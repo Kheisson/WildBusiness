@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace Ui.Animation
     {
         private RectTransform _rectTransform;
         private Sequence _handSequence;
-        public float scaleAmount = 1.2f; 
+        public float scaleAmount = 1.5f; 
         public float duration = 1f;     
 
         private void Start()
