@@ -10,14 +10,19 @@ namespace Ui
     [RequireComponent(typeof(Button))]
     public class ShiftButtonClicker : MonoBehaviour
     {
+        private const int DefaultInitialStamina = 5;
+        private const int DefaultSpReward = 1;
+        private const int MoneyReward = 10;
+        
+        [SerializeField] private Cheque _cheque;
+        
         private int _initialStamina;
         private int _staminaDecreaseAmount;
         private int _spReward;
 
         private PlayerProfileController _playerProfileController;
+        private TutorialManager _tutorialManager;
         private Button _button;
-
-        [SerializeField] private Cheque _cheque;
 
         public event Action OnShiftFinished;
 
@@ -31,9 +36,15 @@ namespace Ui
             SetupButton();
         }
 
+        private void OnDisable()
+        {
+            CleanupButton();
+        }
+
         private void Start()
         {
-            InitializeShift(5, 1);
+            InitializeUI();
+            InitializeShift(DefaultInitialStamina, DefaultSpReward);
             ShowTutorial();
         }
 
@@ -41,33 +52,54 @@ namespace Ui
         {
             _button = GetComponent<Button>();
             _playerProfileController = ServiceLocator.GetService<PlayerProfileController>();
+            _tutorialManager = ServiceLocator.GetService<TutorialManager>();
+        }
+
+        private void InitializeUI()
+        {
+            _button.interactable = false;
+            if (_cheque != null)
+            {
+                _cheque.gameObject.SetActive(false);
+            }
         }
 
         public void InitializeShift(int initialStamina, int spReward)
         {
             _initialStamina = initialStamina;
-            _staminaDecreaseAmount = 1; // You can also make this configurable if needed
+            _staminaDecreaseAmount = 1;
             _spReward = spReward;
+            
             InitializeStamina();
             InitializeCheque();
-            _button.interactable = true;
         }
 
         private void InitializeCheque()
         {
+            if (_cheque == null)
+            {
+                Debug.LogError("Cheque is not assigned.");
+                return;
+            }
+
             _cheque.Initialize(transform as RectTransform, _initialStamina, OnChequeCollected);
         }
 
         private void OnChequeCollected()
         {
-            InitializeShift(5, 1);
-            _playerProfileController.ModifyMoney(10);
+            InitializeShift(DefaultInitialStamina, DefaultSpReward);
+            _playerProfileController.ModifyMoney(MoneyReward);
+            _button.interactable = true;
         }
 
         private void SetupButton()
         {
-            _button.onClick.RemoveListener(OnButtonClick);
             _button.onClick.AddListener(OnButtonClick);
+        }
+        
+        private void CleanupButton()
+        {
+            _button.onClick.RemoveListener(OnButtonClick);
         }
 
         private void InitializeStamina()
@@ -77,19 +109,29 @@ namespace Ui
 
         private void ShowTutorial()
         {
-            ServiceLocator.GetService<TutorialManager>().ShowTutorialElement(ETutorialElementsType.Clicker);
+            _ = _tutorialManager.ShowTutorialElement(ETutorialElementsType.Clicker, EnableClicker);
+        }
+
+        private void EnableClicker()
+        {
+            _button.interactable = true;
+            
+            if (_cheque != null)
+            {
+                _cheque.gameObject.SetActive(true);
+            }
         }
 
         private void HideTutorial()
         {
-            ServiceLocator.GetService<TutorialManager>().HideTutorialElement(ETutorialElementsType.Clicker);
+            _tutorialManager.HideTutorialElement(ETutorialElementsType.Clicker);
         }
 
         private void OnButtonClick()
         {
             DecreaseStamina();
             HideTutorial();
-            _cheque.ShiftButtonClicked();
+            _cheque.ShiftButton();
 
             if (IsStaminaExhausted())
             {
