@@ -4,7 +4,7 @@ using Infra;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ui.Tutorial
+namespace Tutorial
 {
     [RequireComponent(typeof(Image))]
     public class TutorialScreenDarkener : MonoBehaviour

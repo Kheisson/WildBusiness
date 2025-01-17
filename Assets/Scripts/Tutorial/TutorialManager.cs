@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Infra;
 
-namespace Ui.Tutorial
+namespace Tutorial
 {
     public class TutorialManager
     {

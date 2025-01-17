@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Infra.Injector;
-using Ui.Tutorial;
+using Tutorial;
 
 namespace Infra
 {

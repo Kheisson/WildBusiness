@@ -1,57 +1,38 @@
 using System;
-using Infra;
-using Ui.Tutorial;
+using Infra.Events;
+using Tutorial;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ui
+namespace MainMenu
 {
-    [RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(RectTransform), typeof(Button))]
     public class Cheque : MonoBehaviour
     {
+        private const int DEFAULT_CHEQUE_VALUE = 10;
+        
         private RectTransform _rectTransform;
-        private TutorialManager _tutorialManager;
-        private Action _onShiftFinished;
         private Button _button;
+        private TutorialHandler _tutorialHandler;
 
         private bool _isFirstRun = true;
         private float _shiftStep;
         private int _currentClickCount = 0;
         private int _numberOfClicks = 0;
 
-        private void Awake()
+        private void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
             _button = GetComponent<Button>();
-            _tutorialManager = ServiceLocator.GetService<TutorialManager>();
-
             _button.onClick.AddListener(OnChequeButtonClick);
         }
 
-        private void OnDestroy()
+        public void Initialize(RectTransform parent, int clickCount, TutorialHandler tutorialHandler)
         {
-            if (_button != null)
-            {
-                _button.onClick.RemoveListener(OnChequeButtonClick);
-            }
-        }
-
-        public void Initialize(RectTransform parent, int clickCount, Action onShiftFinished)
-        {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent), "Parent RectTransform cannot be null.");
-            }
-
-            if (clickCount <= 0)
-            {
-                throw new ArgumentException("Click count must be greater than zero.", nameof(clickCount));
-            }
-
+            _button.interactable = false;
+            _tutorialHandler = tutorialHandler;
             _numberOfClicks = clickCount;
             _shiftStep = parent.rect.height / _numberOfClicks;
-            _button.interactable = false;
-            _onShiftFinished = onShiftFinished;
         }
 
         public void ShiftButton()
@@ -67,7 +48,7 @@ namespace Ui
                 _button.interactable = true;
 
                 if (!_isFirstRun) return;
-                
+
                 _isFirstRun = false;
                 StartTutorial();
             }
@@ -76,7 +57,7 @@ namespace Ui
         private void StartTutorial()
         {
             _button.interactable = false;
-            _ = _tutorialManager.ShowTutorialElement(ETutorialElementsType.Cheque, () =>
+            _tutorialHandler.ShowTutorial(ETutorialElementsType.Cheque, () =>
             {
                 _button.interactable = true;
             });
@@ -84,16 +65,23 @@ namespace Ui
 
         private void OnChequeButtonClick()
         {
-            _tutorialManager.HideTutorialElement(ETutorialElementsType.Cheque, null);
+            _tutorialHandler.HideTutorial(ETutorialElementsType.Cheque);
+            EventManager.TriggerEvent(new ChequeCollectedEventArgs(DEFAULT_CHEQUE_VALUE));
             ResetCheque();
         }
 
         private void ResetCheque()
         {
             _rectTransform.anchoredPosition = Vector2.zero;
-            _button.interactable = false;
             _currentClickCount = 0;
-            _onShiftFinished?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            if (_button != null)
+            {
+                _button.onClick.RemoveListener(OnChequeButtonClick);
+            }
         }
     }
 }

@@ -30,11 +30,6 @@ namespace Player
             _playerProfileView.SetTickets(_playerProfileData.Tickets);
         }
         
-        public RectTransform GetRectOfElement(EPlayerProfileViewElement viewElement)
-        {
-            return _playerProfileView.GetRectOfElement(viewElement);
-        }
-        
         public bool ModifyStamina(int delta, bool set = false)
         {
             return _playerProfileData.ModifyStamina(delta, set);

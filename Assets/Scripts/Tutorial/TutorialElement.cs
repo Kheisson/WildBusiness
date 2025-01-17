@@ -1,9 +1,8 @@
-using System;
 using Infra;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Ui.Tutorial
+namespace Tutorial
 {
     [RequireComponent(typeof(RectTransform))]
     public class TutorialElement : MonoBehaviour

@@ -1,4 +1,4 @@
-namespace Ui.Tutorial
+namespace Tutorial
 {
     public enum ETutorialElementsType
     {

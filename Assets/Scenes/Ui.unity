@@ -972,6 +972,7 @@ GameObject:
   - component: {fileID: 878998917}
   - component: {fileID: 878998918}
   - component: {fileID: 878998919}
+  - component: {fileID: 878998920}
   m_Layer: 5
   m_Name: TutorialSystem
   m_TagString: Untagged
@@ -1095,6 +1096,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handPrefab: {fileID: 2893882818050668251, guid: 51f927578c3674f0f9f6749f67d287d7, type: 3}
+--- !u!114 &878998920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878998912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1d03738c5d24194ad881b8ed7afeb0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1000925045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cheque: {fileID: 223096501}
-  _damageNumberGui: {fileID: 1867154887482978979, guid: 823da641eee8d4402ae2d0c3db2530c4, type: 3}
+  _tutorialHandler: {fileID: 878998920}
 --- !u!114 &1418615553
 MonoBehaviour:
   m_ObjectHideFlags: 0

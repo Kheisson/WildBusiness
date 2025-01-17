@@ -1856,6 +1856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169d0f3d8aa34de9bce8c086f246f113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageNumberPrefab: {fileID: 1867154887482978979, guid: 823da641eee8d4402ae2d0c3db2530c4, type: 3}
   avatarImage: {fileID: 2778422371760398304}
   titleText: {fileID: 8982382071685815110}
   xpText: {fileID: 2045393867919448772}

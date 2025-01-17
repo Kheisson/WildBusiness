@@ -1,5 +1,8 @@
 using System;
+using DamageNumbersPro;
+using Infra.Events;
 using Infra.Helpers;
+using MainMenu;
 using TMPro;
 using UIAssistant;
 using UnityEngine;
@@ -9,6 +12,7 @@ namespace Ui
 {
     public class PlayerProfileView : MonoBehaviour
     {
+        [SerializeField] private DamageNumber damageNumberPrefab;
         [SerializeField] private Image avatarImage;
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI xpText;
@@ -18,7 +22,30 @@ namespace Ui
         [SerializeField] private TextMeshProUGUI diamondsText;
         [SerializeField] private TextMeshProUGUI ticketsText;
 
-        public RectTransform GetRectOfElement(EPlayerProfileViewElement viewElement)
+        private void Awake()
+        {
+            EventManager.AddListener<ChequeCollectedEventArgs>(OnChequeCollected);
+            EventManager.AddListener<ShiftCompletedEventArgs>(OnShiftCompleted);
+        }
+        
+        private void OnChequeCollected(ChequeCollectedEventArgs args)
+        {
+            ShowDamageNumber(args.ChequeValue, GetRectOfElement(EPlayerProfileViewElement.Money));
+        }
+        
+        private void OnShiftCompleted(ShiftCompletedEventArgs args)
+        {
+            ShowDamageNumber(args.SpRewardForShift, GetRectOfElement(EPlayerProfileViewElement.Sp));
+        }
+        
+        private void ShowDamageNumber(int amount, RectTransform rect)
+        {
+            var amountString = amount > 0 ? $"+{amount}" : amount.ToString();
+
+            damageNumberPrefab.SpawnGUI(rect, Vector2.zero, amountString);
+        }
+
+        private RectTransform GetRectOfElement(EPlayerProfileViewElement viewElement)
         {
             return viewElement switch
             {
