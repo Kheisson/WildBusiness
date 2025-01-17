@@ -84,7 +84,8 @@ namespace Ui
 
         private void OnChequeButtonClick()
         {
-            _tutorialManager.HideTutorialElement(ETutorialElementsType.Cheque, ResetCheque);
+            _tutorialManager.HideTutorialElement(ETutorialElementsType.Cheque, null);
+            ResetCheque();
         }
 
         private void ResetCheque()

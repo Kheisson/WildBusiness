@@ -1453,6 +1453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cheque: {fileID: 223096501}
+  _damageNumberGui: {fileID: 1867154887482978979, guid: 823da641eee8d4402ae2d0c3db2530c4, type: 3}
 --- !u!114 &1418615553
 MonoBehaviour:
   m_ObjectHideFlags: 0

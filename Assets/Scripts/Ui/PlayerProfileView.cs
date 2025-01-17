@@ -18,6 +18,21 @@ namespace Ui
         [SerializeField] private TextMeshProUGUI diamondsText;
         [SerializeField] private TextMeshProUGUI ticketsText;
 
+        public RectTransform GetRectOfElement(EPlayerProfileViewElement viewElement)
+        {
+            return viewElement switch
+            {
+                EPlayerProfileViewElement.Diamonds => diamondsText.rectTransform,
+                EPlayerProfileViewElement.Money => moneyText.rectTransform,
+                EPlayerProfileViewElement.Nickname => nicknameText.rectTransform,
+                EPlayerProfileViewElement.Sp => spText.rectTransform,
+                EPlayerProfileViewElement.Xp => xpText.rectTransform,
+                EPlayerProfileViewElement.Tickets => ticketsText.rectTransform,
+                EPlayerProfileViewElement.Title => titleText.rectTransform,
+                _ => null,
+            };
+        }
+        
         public void SetAvatar(Sprite avatar)
         {
             avatarImage.sprite = avatar;

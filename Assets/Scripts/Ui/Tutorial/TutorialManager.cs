@@ -38,6 +38,8 @@ namespace Ui.Tutorial
         
         public void HideTutorialElement(ETutorialElementsType elementType, Action onTutorialHidden = null)
         {
+            if (_currentTutorialElement == ETutorialElementsType.None) return;
+            
             if (_currentTutorialElement != elementType)
             {
                 LlamaLog.LogWarning("Tutorial element is not the current element. Current: " + _currentTutorialElement + " Requested: " + elementType);
@@ -46,6 +48,7 @@ namespace Ui.Tutorial
             
             _tutorialScreenDarkener.Hide(); 
             onTutorialHidden?.Invoke();
+            _currentTutorialElement = ETutorialElementsType.None;
         }
     }
 }

@@ -1,4 +1,5 @@
 using Ui;
+using UnityEngine;
 
 namespace Player
 {
@@ -27,6 +28,11 @@ namespace Player
             _playerProfileView.SetMoney(_playerProfileData.Money);
             _playerProfileView.SetDiamonds(_playerProfileData.Diamonds);
             _playerProfileView.SetTickets(_playerProfileData.Tickets);
+        }
+        
+        public RectTransform GetRectOfElement(EPlayerProfileViewElement viewElement)
+        {
+            return _playerProfileView.GetRectOfElement(viewElement);
         }
         
         public bool ModifyStamina(int delta, bool set = false)

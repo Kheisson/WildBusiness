@@ -1,4 +1,5 @@
 using System;
+using DamageNumbersPro;
 using Infra;
 using Player;
 using Ui.Tutorial;
@@ -10,11 +11,12 @@ namespace Ui
     [RequireComponent(typeof(Button))]
     public class ShiftButtonClicker : MonoBehaviour
     {
-        private const int DefaultInitialStamina = 5;
-        private const int DefaultSpReward = 1;
-        private const int MoneyReward = 10;
+        private const int DEFAULT_INITIAL_STAMINA = 5;
+        private const int DEFAULT_SP_REWARD = 1;
+        private const int MONEY_REWARD = 10;
         
         [SerializeField] private Cheque _cheque;
+        [SerializeField] private DamageNumber _damageNumberGui;
         
         private int _initialStamina;
         private int _staminaDecreaseAmount;
@@ -44,7 +46,7 @@ namespace Ui
         private void Start()
         {
             InitializeUI();
-            InitializeShift(DefaultInitialStamina, DefaultSpReward);
+            InitializeShift(DEFAULT_INITIAL_STAMINA, DEFAULT_SP_REWARD);
             ShowTutorial();
         }
 
@@ -87,8 +89,10 @@ namespace Ui
 
         private void OnChequeCollected()
         {
-            InitializeShift(DefaultInitialStamina, DefaultSpReward);
-            _playerProfileController.ModifyMoney(MoneyReward);
+            InitializeShift(DEFAULT_INITIAL_STAMINA, DEFAULT_SP_REWARD);
+            _playerProfileController.ModifyMoney(MONEY_REWARD);
+            var moneyRect = _playerProfileController.GetRectOfElement(EPlayerProfileViewElement.Money);
+            _damageNumberGui.SpawnGUI(moneyRect, Vector2.zero, $"+{MONEY_REWARD}");
             _button.interactable = true;
         }
 
@@ -159,7 +163,9 @@ namespace Ui
 
         private void RewardPlayer()
         {
-            _playerProfileController.ModifySp(_spReward, true);
+            _playerProfileController.ModifySp(_spReward);
+            var spRect = _playerProfileController.GetRectOfElement(EPlayerProfileViewElement.Sp);
+            _damageNumberGui.SpawnGUI(spRect, Vector2.zero, $"+{_spReward}");
         }
 
         private void NotifyShiftFinished()

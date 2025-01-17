@@ -4,5 +4,6 @@ namespace Ui.Tutorial
     {
         Clicker,
         Cheque,
+        None,
     }
 }
