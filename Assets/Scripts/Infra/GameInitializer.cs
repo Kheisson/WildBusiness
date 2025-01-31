@@ -51,7 +51,7 @@ namespace Infra
                 }
             }
         }
-
+#if UNITY_WEBGL
         //TODO: Remove this method
         private void Update()
         {
@@ -67,5 +67,6 @@ namespace Infra
                 Debug.Log($"Deleted save file: {file}");
             }
         }
+#endif
     }
 }

@@ -20,7 +20,7 @@ namespace Scenes
         
         private void Start()
         {
-            introVideo.Play();
+            SetupVideoAndPlay();
             skipButton.onClick.AddListener(SkipIntro);
             skipButton.gameObject.SetActive(false);
         }
@@ -35,6 +35,14 @@ namespace Scenes
             }
                 
             _showButtonCooldownCoroutine = StartCoroutine(ShowButtonCooldown());
+        }
+        
+        private void SetupVideoAndPlay()
+        {
+            //Get the streaming assets path (where the video is stored)
+            var videoPath = Application.streamingAssetsPath + "/Intro.mp4";
+            introVideo.url = videoPath;
+            introVideo.Play();
         }
         
         private IEnumerator ShowButtonCooldown()
