@@ -86,5 +86,40 @@ namespace Player
         public bool ModifyDiamonds(int delta, bool set) => TryModifyValue(ref diamonds, delta, set);
         public bool ModifyTickets(int delta, bool set) => TryModifyValue(ref tickets, delta, set);
         public bool ModifyStamina(int delta, bool set) => TryModifyValue(ref stamina, delta, set);
+        
+        public PlayerProfileData ToSerializableData()
+        {
+            return new PlayerProfileData
+            {
+                title = this.title,
+                nickname = this.nickname,
+                xp = this.xp,
+                sp = this.sp,
+                money = this.money,
+                diamonds = this.diamonds,
+                tickets = this.tickets,
+                stamina = this.stamina,
+                avatarPath = avatar != null ? avatar.name : null,
+            };
+        }
+        
+        public void FromSerializableData(PlayerProfileData data)
+        {
+            title = data.title;
+            nickname = data.nickname;
+            xp = data.xp;
+            sp = data.sp;
+            money = data.money;
+            diamonds = data.diamonds;
+            tickets = data.tickets;
+            stamina = data.stamina;
+
+            if (!string.IsNullOrEmpty(data.avatarPath))
+            {
+                avatar = Resources.Load<Sprite>(data.avatarPath);
+            }
+
+            OnProfileUpdated?.Invoke();
+        }
     }
 }
