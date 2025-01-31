@@ -1,5 +1,6 @@
+using Infra;
+using Save;
 using Ui;
-using UnityEngine;
 
 namespace Player
 {
@@ -7,14 +8,21 @@ namespace Player
     {
         private readonly PlayerProfileView _playerProfileView;
         private readonly PlayerProfileSo _playerProfileData;
+        private readonly SaveManager _saveManager;
         
         public PlayerProfileController(PlayerProfileSo playerProfileData, PlayerProfileView playerProfileView)
         {
+            _saveManager = ServiceLocator.GetService<SaveManager>();
+            
             _playerProfileData = playerProfileData;
             _playerProfileView = playerProfileView;
             
             _playerProfileData.OnProfileUpdated -= UpdateView;
+            _playerProfileData.OnProfileUpdated -= SaveProfile;
             _playerProfileData.OnProfileUpdated += UpdateView;
+            _playerProfileData.OnProfileUpdated += SaveProfile;
+            
+            LoadProfile();
             UpdateView();
         }
 
@@ -103,6 +111,21 @@ namespace Player
         public void UpdateNickname(string newNickname)
         {
             _playerProfileData.UpdateNickname(newNickname);
+        }
+
+        private void SaveProfile()
+        {
+            _saveManager.Save(SaveKeys.PLAYER_PROFILE, _playerProfileData.ToSerializableData());
+        }
+        
+        private void LoadProfile()
+        {
+            var playerProfileData = _saveManager.Load<PlayerProfileData>(SaveKeys.PLAYER_PROFILE);
+            
+            if (playerProfileData != null)
+            {
+                _playerProfileData.FromSerializableData(playerProfileData);
+            }
         }
     }
 }

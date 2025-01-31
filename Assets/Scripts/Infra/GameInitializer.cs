@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using Infra.Injector;
-using Save;
-using Tutorial;
+using UnityEngine;
 
 namespace Infra
 {
@@ -51,23 +51,21 @@ namespace Infra
                 }
             }
         }
-        
-        private void InitializeSaveSystem()
-        {
-            var saveSystem = new SaveSystemInitializer();
-            RegisterInjector(saveSystem, saveSystem.InjectionTiming);
-        }
-        
-        private void InitializeTutorialManager()
-        {
-            var tutorialManager = new TutorialManager();
-            ServiceLocator.RegisterService(tutorialManager);
-        }
 
-        public void Initialize()
+        //TODO: Remove this method
+        private void Update()
         {
-            InitializeSaveSystem();
-            InitializeTutorialManager();
+            if (!Input.GetKeyDown(KeyCode.R)) return;
+            
+            var path = Application.persistentDataPath;
+                
+            var files = Directory.GetFiles(path, "*.sav");
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+                Debug.Log($"Deleted save file: {file}");
+            }
         }
     }
 }
