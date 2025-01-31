@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Infra.Injector;
+using Save;
 using Tutorial;
 
 namespace Infra
@@ -7,7 +8,6 @@ namespace Infra
     public class GameInitializer : SingletonMono<GameInitializer>
     {
         private readonly List<IInjector> _injectors = new List<IInjector>();
-        private TutorialManager _tutorialManager;
 
         public void RegisterInjector(IInjector injector, InjectionType injectionType)
         {
@@ -52,14 +52,21 @@ namespace Infra
             }
         }
         
+        private void InitializeSaveSystem()
+        {
+            var saveSystem = new SaveSystemInitializer();
+            RegisterInjector(saveSystem, saveSystem.InjectionTiming);
+        }
+        
         private void InitializeTutorialManager()
         {
-            _tutorialManager = new TutorialManager();
-            ServiceLocator.RegisterService(_tutorialManager);
+            var tutorialManager = new TutorialManager();
+            ServiceLocator.RegisterService(tutorialManager);
         }
 
         public void Initialize()
         {
+            InitializeSaveSystem();
             InitializeTutorialManager();
         }
     }

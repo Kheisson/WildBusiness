@@ -1,4 +1,3 @@
-using System;
 using Infra.Events;
 using Tutorial;
 using UnityEngine;

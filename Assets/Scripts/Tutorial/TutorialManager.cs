@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Infra;
+using Save;
 
 namespace Tutorial
 {
@@ -11,6 +12,7 @@ namespace Tutorial
         private readonly Dictionary<ETutorialElementsType, TutorialElement> _tutorialElements = new();
         private TutorialScreenDarkener _tutorialScreenDarkener;
         private ETutorialElementsType _currentTutorialElement;
+        private bool completedTutorial = ServiceLocator.GetService<SaveManager>().Load<bool>(SaveKeys.COMPLETED_TUTORIAL);
 
         public void RegisterTutorialElement(TutorialElement tutorialElement)
         {
@@ -19,6 +21,12 @@ namespace Tutorial
         
         public async Task ShowTutorialElement(ETutorialElementsType elementType, Action onTutorialShown, float delay = 1f)
         {
+            if (completedTutorial)
+            {
+                onTutorialShown?.Invoke();
+                return;
+            }
+            
             if (_tutorialScreenDarkener == null)
             {
                 _tutorialScreenDarkener = ServiceLocator.GetService<TutorialScreenDarkener>();
@@ -38,6 +46,12 @@ namespace Tutorial
         
         public void HideTutorialElement(ETutorialElementsType elementType, Action onTutorialHidden = null)
         {
+            if (completedTutorial)
+            {
+                onTutorialHidden?.Invoke();
+                return;
+            }
+            
             if (_currentTutorialElement == ETutorialElementsType.None) return;
             
             if (_currentTutorialElement != elementType)
