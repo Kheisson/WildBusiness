@@ -24,8 +24,8 @@ namespace Tutorial
         private Image _darkenImage;
         private bool _isHighlighted;
 
-        public GameObject handPrefab;  // Assign this in the Inspector
-        private GameObject _handInstance; // Store the instantiated hand object
+        public GameObject handPrefab; 
+        private GameObject _handInstance; 
 
         private void Awake()
         {
