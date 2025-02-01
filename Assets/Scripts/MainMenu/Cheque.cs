@@ -59,7 +59,7 @@ namespace MainMenu
             _tutorialHandler.ShowTutorial(ETutorialElementsType.Cheque, () =>
             {
                 _button.interactable = true;
-            });
+            }, 0f);
         }
 
         private void OnChequeButtonClick()

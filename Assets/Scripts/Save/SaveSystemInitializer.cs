@@ -11,7 +11,7 @@ namespace Save
         public void Inject()
         {
             var saveSerializer = new JsonSaveSerializer();
-            #if UNITY_WEBGL
+            #if UNITY_WEBGL && !UNITY_EDITOR
             var saveStorage = new PlayerPrefsSaveStorage();
             #else
             var saveStorage = new FileSaveStorage(Application.persistentDataPath);

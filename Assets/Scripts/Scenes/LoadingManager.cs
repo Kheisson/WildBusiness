@@ -1,4 +1,5 @@
-using System.Collections;
+using System;
+using Cysharp.Threading.Tasks;
 using Infra;
 using Save;
 using TMPro;
@@ -11,8 +12,8 @@ namespace Scenes
     public class LoadingManager : MonoBehaviour
     {
         [Header("UI References")]
-        [SerializeField] private Slider progressBar;             
-        [SerializeField] private TextMeshProUGUI versionText;    
+        [SerializeField] private Slider progressBar;
+        [SerializeField] private TextMeshProUGUI versionText;
 
         public const string MAIN_SCENE = "Main";
         public const string UI_SCENE = "Ui";
@@ -21,84 +22,100 @@ namespace Scenes
 
         private SaveManager _saveManager;
 
-        private void Start()
+        private async void Start()
         {
             versionText.text = $"Version: {Application.version}";
 
-            _saveManager = Infra.ServiceLocator.GetService<SaveManager>();
+            _saveManager = ServiceLocator.GetService<SaveManager>();
 
-            StartCoroutine(LoadGame());
+            await LoadGameAsync();
         }
 
-        private IEnumerator LoadGame()
+        private async UniTask LoadGameAsync()
         {
-            yield return new WaitForSeconds(0.5f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.5));
 
             var tutorialCompleted = _saveManager.Exists(SaveKeys.COMPLETED_TUTORIAL) &&
                                     _saveManager.Load<bool>(SaveKeys.COMPLETED_TUTORIAL);
 
             if (tutorialCompleted)
             {
-                yield return StartCoroutine(LoadSceneWithDependencies(MAIN_SCENE, UI_SCENE));
+                await LoadSceneWithDependenciesAsync(MAIN_SCENE, UI_SCENE);
             }
             else
             {
-                yield return StartCoroutine(LoadSceneAsync(INTRO_MOVIE_SCENE));
+                await LoadSceneAsync(INTRO_MOVIE_SCENE);
             }
         }
 
-        private IEnumerator LoadSceneWithDependencies(string mainScene, string uiScene)
+        private async UniTask LoadSceneWithDependenciesAsync(string mainScene, string uiScene)
         {
             var mainSceneLoad = SceneManager.LoadSceneAsync(mainScene, LoadSceneMode.Additive);
             var uiSceneLoad = SceneManager.LoadSceneAsync(uiScene, LoadSceneMode.Additive);
 
-            if (mainSceneLoad != null && uiSceneLoad != null)
+            while (mainSceneLoad != null && uiSceneLoad != null && (!mainSceneLoad.isDone || !uiSceneLoad.isDone))
             {
-                mainSceneLoad.allowSceneActivation = false;
-                uiSceneLoad.allowSceneActivation = false;
+                var combinedProgress = Mathf.Clamp01(
+                    (mainSceneLoad.progress + uiSceneLoad.progress) / 2f
+                );
 
-                while (mainSceneLoad.progress < 0.9f || uiSceneLoad.progress < 0.9f)
-                {
-                    var combinedProgress = Mathf.Clamp01((mainSceneLoad.progress + uiSceneLoad.progress) / 1.8f);
-                    progressBar.value = combinedProgress;
+                progressBar.value = combinedProgress;
 
-                    LlamaLog.LogInfo($"Main Scene Progress: {mainSceneLoad.progress}, UI Scene Progress: {uiSceneLoad.progress}");
-
-                    yield return null; 
-                }
-
-                LlamaLog.LogInfo("Both scenes are ready to be activated.");
-
-                mainSceneLoad.allowSceneActivation = true;
-                uiSceneLoad.allowSceneActivation = true;
-
-                while (!mainSceneLoad.isDone || !uiSceneLoad.isDone)
-                {
-                    yield return null;
-                }
-
-                LlamaLog.LogInfo("Both scenes are successfully activated.");
-            }
-            else
-            {
-                LlamaLog.LogError("Scene loading failed.");
+                await UniTask.Yield();
             }
 
-            yield return new WaitForEndOfFrame();
+            await mainSceneLoad.ToUniTask();
+            await uiSceneLoad.ToUniTask();
 
-            SceneManager.UnloadSceneAsync(LOADING_SCENE);
+            await WaitForSceneReadyAsync(mainScene);
+
+            await SceneManager.UnloadSceneAsync(LOADING_SCENE);
         }
 
-        private IEnumerator LoadSceneAsync(string sceneName)
+        private async UniTask LoadSceneAsync(string sceneName)
         {
             var operation = SceneManager.LoadSceneAsync(sceneName);
 
-            while (!operation.isDone)
+            while (operation is { isDone: false })
             {
                 var progress = Mathf.Clamp01(operation.progress / 0.9f);
-                progressBar.value = progress; 
-                yield return null; 
+                progressBar.value = progress;
+                await UniTask.Yield();
             }
+
+            await WaitForSceneReadyAsync(sceneName);
+        }
+
+        private async UniTask WaitForSceneReadyAsync(string sceneName)
+        {
+            var loadedScene = SceneManager.GetSceneByName(sceneName);
+
+            if (!loadedScene.isLoaded)
+            {
+                LlamaLog.LogError($"Scene {sceneName} is not loaded yet.");
+                return;
+            }
+
+            var rootObjects = loadedScene.GetRootGameObjects();
+            foreach (var obj in rootObjects)
+            {
+                var sceneReadyComponent = obj.GetComponent<ISceneReady>();
+                if (sceneReadyComponent != null)
+                {
+                    if (!sceneReadyComponent.IsReady)
+                    {
+                        var taskCompletionSource = new UniTaskCompletionSource();
+                        sceneReadyComponent.OnSceneReady += () => taskCompletionSource.TrySetResult();
+
+                        await taskCompletionSource.Task;  
+                    }
+
+                    LlamaLog.LogInfo($"Scene {sceneName} is ready.");
+                    return;
+                }
+            }
+
+            LlamaLog.LogWarning($"No ISceneReady implementation found in scene {sceneName}. Proceeding anyway.");
         }
     }
 }

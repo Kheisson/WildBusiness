@@ -1,4 +1,5 @@
-using System.Collections;
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,60 +7,76 @@ using UnityEngine.Video;
 
 namespace Scenes
 {
-    public class IntroManager : MonoBehaviour
+    public class IntroManager : MonoBehaviour, ISceneReady
     {
         [SerializeField] private VideoPlayer introVideo;
         [SerializeField] private Button skipButton;
-        
-        private Coroutine _showButtonCooldownCoroutine;
+
+        public bool IsReady { get; private set; }
+        public event Action OnSceneReady;  
+
+        private bool isIntroFinished;
 
         private void Awake()
         {
             introVideo.loopPointReached += OnIntroFinished;
         }
-        
-        private void Start()
+
+        private async void Start()
         {
-            SetupVideoAndPlay();
             skipButton.onClick.AddListener(SkipIntro);
             skipButton.gameObject.SetActive(false);
+
+            await SetupVideoAndPlayAsync();
+
+            IsReady = true;
+            OnSceneReady?.Invoke();  
+
+            await WaitForIntroToFinishAsync();
+
+            LoadMainAndUI();
         }
-        
-        private void Update()
+
+        private void OnDestroy()
         {
-            if (!Input.anyKeyDown) return;
-            
-            if (_showButtonCooldownCoroutine != null)
-            {
-                StopCoroutine(_showButtonCooldownCoroutine);
-            }
-                
-            _showButtonCooldownCoroutine = StartCoroutine(ShowButtonCooldown());
+            introVideo.loopPointReached -= OnIntroFinished;
         }
-        
-        private void SetupVideoAndPlay()
+
+        private async UniTask SetupVideoAndPlayAsync()
         {
-            //Get the streaming assets path (where the video is stored)
             var videoPath = Application.streamingAssetsPath + "/Intro.mp4";
+
             introVideo.url = videoPath;
+
+            var videoPrepared = new UniTaskCompletionSource();
+
+            introVideo.prepareCompleted += _ => videoPrepared.TrySetResult();
+            introVideo.Prepare();
+
+            await videoPrepared.Task;
+
             introVideo.Play();
         }
-        
-        private IEnumerator ShowButtonCooldown()
+
+        private async UniTask WaitForIntroToFinishAsync()
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
             skipButton.gameObject.SetActive(true);
-            yield return new WaitForSeconds(3f);
-            skipButton.gameObject.SetActive(false);
+
+            while (!isIntroFinished)
+            {
+                await UniTask.Yield();  
+            }
         }
 
         private void OnIntroFinished(VideoPlayer vp)
         {
-            LoadMainAndUI();
+            isIntroFinished = true; 
         }
 
         private void SkipIntro()
         {
-            LoadMainAndUI();
+            isIntroFinished = true;  
         }
 
         private void LoadMainAndUI()
